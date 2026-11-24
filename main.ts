@@ -15,7 +15,7 @@
 //   round: 34251998
 //   signature: 84ff21ba0f3a2a2a78d0e2de82b732335b4ae3b1f203e68d41e403d024c03e040c4b4998edef833d552ca240e2f6da8a
 
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 
 const ENTRY =
   "A traffic jam is recess when the whole school tries to squeeze through one door at once, so everyone shuffles forward an inch at a time and nobody gets anywhere fast.\n" +
@@ -32,3 +32,8 @@ if (ENTRY.length < 1 || ENTRY.length > 400 || ENTRY.trim().length === 0) {
 
 mkdirSync("/output", { recursive: true });
 writeFileSync("/output/entry.txt", ENTRY + "\n", "utf8");
+
+// Read-back: the file on disk must be exactly the entry above.
+if (readFileSync("/output/entry.txt", "utf8") !== ENTRY + "\n") {
+  throw new Error("read-back mismatch: /output/entry.txt differs from ENTRY");
+}
